@@ -14,6 +14,8 @@ import java.util.List;
 
 import supsi.mobile.weather.model.WeatherRecord;
 
+//TODO complete layout for detail fragment
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -24,10 +26,9 @@ public class MainActivity extends AppCompatActivity {
         List<WeatherRecord> entries = new ArrayList<>();
 
         LocationManager.getInstance().startListening(getApplicationContext());
-        //LocationManager.getInstance().getGeocodedLocation("Milano");
 
         for(int i = 0; i < 100; i++)
-            entries.add(new WeatherRecord("Bruh"));
+            entries.add(new WeatherRecord("Test"));
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.list_fragment_container);

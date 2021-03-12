@@ -17,7 +17,7 @@
         android:text="Record"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
-        android:textSize="30sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

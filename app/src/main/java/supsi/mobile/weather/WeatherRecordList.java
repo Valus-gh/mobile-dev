@@ -78,6 +78,8 @@ public class WeatherRecordList extends Fragment {
         public WeatherRecordHolder(LayoutInflater layoutInflater, ViewGroup viewGroup) {
             super(layoutInflater.inflate(R.layout.weather_record_list_item, viewGroup, false));
 
+            //TODO attach listener to itemView -> startActivity(detailPage)
+
             title = itemView.findViewById(R.id.weather_record_list_item);
         }
 
