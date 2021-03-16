@@ -6,6 +6,12 @@ public class WeatherRecord {
     private float maxRecordedTemp;
     private float minRecordedTemp;
 
+    public WeatherRecord(String name, float maxRecordedTemp, float minRecordedTemp) {
+        this.name = name;
+        this.maxRecordedTemp = maxRecordedTemp;
+        this.minRecordedTemp = minRecordedTemp;
+    }
+
     public WeatherRecord(String name) {
         this.name = name;
     }

@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import supsi.mobile.weather.model.WeatherRecord;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +17,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class DetailFragment extends Fragment {
+
+    private WeatherRecord record;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +28,10 @@ public class DetailFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    public DetailFragment(WeatherRecord record) {
+        this.record = record;
+    }
 
     public DetailFragment() {
         // Required empty public constructor
@@ -58,7 +67,17 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        TextView location = view.findViewById(R.id.titleLabel);
+        TextView currentTemperature = view.findViewById(R.id.temperatureTextview);
+        TextView maxTemperature = view.findViewById(R.id.maxTemperatureTextview);
+        TextView minTemperature = view.findViewById(R.id.minTemperatureTextview);
+
+        location.setText(record.getName());
+        maxTemperature.setText(String.format("%s C", record.getMaxRecordedTemp()));
+        maxTemperature.setText(String.format("%s C", record.getMinRecordedTemp()));
+
+        return view;
     }
 }

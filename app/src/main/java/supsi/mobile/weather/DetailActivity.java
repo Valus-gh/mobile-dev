@@ -1,6 +1,8 @@
 package supsi.mobile.weather;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +20,22 @@ public class DetailActivity extends AppCompatActivity {
 
         int recordIndex = getIntent().getIntExtra("record", -1);
 
-        if(recordIndex != -1){
+        Log.d("TRACE", recordIndex +"");
+
+        if(recordIndex == -1){
             Log.d("TRACE", recordIndex +"");
+        }else{
+            FragmentManager fm = getSupportFragmentManager();
+            Fragment fragment = fm.findFragmentById(R.id.detailActivity);
+
+            if(fragment == null){
+                fragment = new DetailFragment(new WeatherRecord("Location 1", 10.f, 20.0f));
+                fm.beginTransaction()
+                        .add(R.id.detailActivity, fragment)
+                        .commit();
+            }
+
+
         }
 
     }
