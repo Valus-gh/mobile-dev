@@ -23,18 +23,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //*********************//
+
         List<WeatherRecord> entries = new ArrayList<>();
 
-        LocationManager.getInstance().startListening(getApplicationContext());
+        //LocationManager.getInstance().startListening(getApplicationContext());
 
         for(int i = 0; i < 100; i++)
             entries.add(new WeatherRecord("Test"));
+
+        //*********************//
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.list_fragment_container);
 
         if(fragment == null){
-            fragment = new WeatherRecordList(entries);
+            fragment = new WeatherRecordList(entries, MainActivity.this);
             fm.beginTransaction()
                     .add(R.id.list_fragment_container, fragment)
                     .commit();

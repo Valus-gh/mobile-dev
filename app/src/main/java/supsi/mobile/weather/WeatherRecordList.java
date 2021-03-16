@@ -1,5 +1,7 @@
 package supsi.mobile.weather;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,9 +29,11 @@ public class WeatherRecordList extends Fragment {
     private RecyclerView recyclerView;
     private WeatherRecordAdapter adapter;
     private List<WeatherRecord> entries = new ArrayList<>();
+    private Context mainActivity;
 
-    public WeatherRecordList(List<WeatherRecord> entries) {
+    public WeatherRecordList(List<WeatherRecord> entries, Context activity) {
         this.entries = entries;
+        this.mainActivity = activity;
     }
 
     public WeatherRecordList() {
@@ -40,12 +44,9 @@ public class WeatherRecordList extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WeatherRecordList.
      */
     // TODO: Rename and change types and number of parameters
-    public static WeatherRecordList newInstance(String param1, String param2) {
+    public static WeatherRecordList newInstance() {
         WeatherRecordList fragment = new WeatherRecordList();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -65,7 +66,7 @@ public class WeatherRecordList extends Fragment {
         recyclerView = view.findViewById(R.id.weather_record_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new WeatherRecordAdapter(entries);
+        adapter = new WeatherRecordAdapter(entries, mainActivity);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -74,17 +75,29 @@ public class WeatherRecordList extends Fragment {
     static class WeatherRecordHolder extends RecyclerView.ViewHolder {
 
         private final TextView title;
+        private int index;
+        private Context mainActivity;
 
         public WeatherRecordHolder(LayoutInflater layoutInflater, ViewGroup viewGroup) {
             super(layoutInflater.inflate(R.layout.weather_record_list_item, viewGroup, false));
 
             //TODO attach listener to itemView -> startActivity(detailPage)
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = DetailActivity.newIntent(mainActivity, index);
+                    mainActivity.startActivity(intent);
+                }
+            });
             title = itemView.findViewById(R.id.weather_record_list_item);
+
+
         }
 
-        public void bind(WeatherRecord entry) {
-            title.setText(entry.getName());
+        public void bind(WeatherRecord entry, int index, Context mainActivity) {
+            this.title.setText(entry.getName());
+            this.index = index;
+            this.mainActivity = mainActivity;
         }
 
     }
@@ -92,9 +105,11 @@ public class WeatherRecordList extends Fragment {
     class WeatherRecordAdapter extends RecyclerView.Adapter<WeatherRecordHolder> {
 
         private final List<WeatherRecord> entries;
+        private final Context mainActivity;
 
-        public WeatherRecordAdapter(List<WeatherRecord> entries) {
+        public WeatherRecordAdapter(List<WeatherRecord> entries, Context mainActivity) {
             this.entries = entries;
+            this.mainActivity = mainActivity;
         }
 
         @NonNull
@@ -106,7 +121,7 @@ public class WeatherRecordList extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull WeatherRecordHolder holder, int position) {
-            holder.bind(entries.get(position));
+            holder.bind(entries.get(position), position, mainActivity);
         }
 
         @Override
