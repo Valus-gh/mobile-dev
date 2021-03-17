@@ -1,4 +1,4 @@
-package supsi.mobile.weather;
+package supsi.mobile.weather.fragments;
 
 import android.os.Bundle;
 
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import supsi.mobile.weather.R;
 import supsi.mobile.weather.model.WeatherRecord;
 
 /**

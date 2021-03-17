@@ -1,4 +1,4 @@
-package supsi.mobile.weather;
+package supsi.mobile.weather.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import supsi.mobile.weather.fragments.DetailFragment;
+import supsi.mobile.weather.R;
 import supsi.mobile.weather.model.WeatherRecord;
 
 public class DetailActivity extends AppCompatActivity {

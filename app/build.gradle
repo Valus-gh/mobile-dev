@@ -47,4 +47,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'io.nlopez.smartlocation:library:3.3.3'
+
+    implementation group: 'net.aksingh', name: 'owm-japis', version: '2.5.0.3'
+
 }

@@ -1,17 +1,16 @@
-package supsi.mobile.weather;
+package supsi.mobile.weather.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import supsi.mobile.weather.R;
+import supsi.mobile.weather.fragments.WeatherRecordListFragment;
 import supsi.mobile.weather.model.WeatherRecord;
 
 //TODO complete layout for detail fragment
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = fm.findFragmentById(R.id.list_fragment_container);
 
         if(fragment == null){
-            fragment = new WeatherRecordList(entries, MainActivity.this);
+            fragment = new WeatherRecordListFragment(entries, MainActivity.this);
             fm.beginTransaction()
                     .add(R.id.list_fragment_container, fragment)
                     .commit();

@@ -1,4 +1,4 @@
-package supsi.mobile.weather;
+package supsi.mobile.weather.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,26 +17,28 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import supsi.mobile.weather.R;
+import supsi.mobile.weather.activities.DetailActivity;
 import supsi.mobile.weather.model.WeatherRecord;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link WeatherRecordList#newInstance} factory method to
+ * Use the {@link WeatherRecordListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WeatherRecordList extends Fragment {
+public class WeatherRecordListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private WeatherRecordAdapter adapter;
     private List<WeatherRecord> entries = new ArrayList<>();
     private Context mainActivity;
 
-    public WeatherRecordList(List<WeatherRecord> entries, Context activity) {
+    public WeatherRecordListFragment(List<WeatherRecord> entries, Context activity) {
         this.entries = entries;
         this.mainActivity = activity;
     }
 
-    public WeatherRecordList() {
+    public WeatherRecordListFragment() {
         // Required empty public constructor
     }
 
@@ -46,8 +48,8 @@ public class WeatherRecordList extends Fragment {
      *
      */
     // TODO: Rename and change types and number of parameters
-    public static WeatherRecordList newInstance() {
-        WeatherRecordList fragment = new WeatherRecordList();
+    public static WeatherRecordListFragment newInstance() {
+        WeatherRecordListFragment fragment = new WeatherRecordListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
