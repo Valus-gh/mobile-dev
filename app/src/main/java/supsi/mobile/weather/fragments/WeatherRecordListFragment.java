@@ -21,15 +21,8 @@ import supsi.mobile.weather.R;
 import supsi.mobile.weather.activities.DetailActivity;
 import supsi.mobile.weather.model.WeatherRecord;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WeatherRecordListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WeatherRecordListFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private WeatherRecordAdapter adapter;
     private List<WeatherRecord> entries = new ArrayList<>();
     private Context mainActivity;
 
@@ -65,10 +58,10 @@ public class WeatherRecordListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.weather_record_list, container, false);
-        recyclerView = view.findViewById(R.id.weather_record_list);
+        RecyclerView recyclerView = view.findViewById(R.id.weather_record_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new WeatherRecordAdapter(entries, mainActivity);
+        WeatherRecordAdapter adapter = new WeatherRecordAdapter(entries, mainActivity);
         recyclerView.setAdapter(adapter);
 
         return view;

@@ -4,7 +4,6 @@ import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 
 import org.json.JSONException;
-
 import java.io.IOException;
 
 import supsi.mobile.weather.model.WeatherRecord;
@@ -32,13 +31,12 @@ public class WeatherRecordManager {
 
         if (currentWeather.hasResponseCode()
                 && currentWeather.getResponseCode() == 200
-                && currentWeather.hasCityName()) {
-
-            return new WeatherRecord(currentWeather.getCityName(),
+                && currentWeather.hasCityName())
+            return new WeatherRecord(
+                    currentWeather.getCityName(),
                     currentWeather.getMainInstance().getTemperature(),
                     currentWeather.getMainInstance().getMaxTemperature(),
                     currentWeather.getMainInstance().getMinTemperature());
-        }
 
         return null;
     }
