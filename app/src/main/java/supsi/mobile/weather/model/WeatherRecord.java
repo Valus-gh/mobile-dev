@@ -1,12 +1,37 @@
 package supsi.mobile.weather.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "records")
 public class WeatherRecord {
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "name")
     private final String name;
+
+    @ColumnInfo(name = "current_temp")
     private float currentTemp;
+
+    @ColumnInfo(name = "max_temp")
     private float maxRecordedTemp;
+
+    @ColumnInfo(name = "min_temp")
     private float minRecordedTemp;
 
+    public WeatherRecord(int id, String name, float currentTemp, float maxRecordedTemp, float minRecordedTemp) {
+        this.id = id;
+        this.name = name;
+        this.currentTemp = currentTemp;
+        this.maxRecordedTemp = maxRecordedTemp;
+        this.minRecordedTemp = minRecordedTemp;
+    }
+
+    @Ignore
     public WeatherRecord(String name, float currentTemp, float maxRecordedTemp, float minRecordedTemp) {
         this.name = name;
         this.maxRecordedTemp = maxRecordedTemp;
@@ -14,6 +39,7 @@ public class WeatherRecord {
         this.currentTemp = currentTemp;
     }
 
+    @Ignore
     public WeatherRecord(String name) {
         this.name = name;
     }
@@ -44,5 +70,13 @@ public class WeatherRecord {
 
     public void setCurrentTemp(float currentTemp) {
         this.currentTemp = currentTemp;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

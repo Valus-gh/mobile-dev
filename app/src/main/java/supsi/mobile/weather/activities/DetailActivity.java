@@ -12,8 +12,11 @@ import android.util.Log;
 import supsi.mobile.weather.fragments.DetailFragment;
 import supsi.mobile.weather.R;
 import supsi.mobile.weather.model.WeatherRecord;
+import supsi.mobile.weather.persistence.RecordDatabase;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private WeatherRecord record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +30,18 @@ public class DetailActivity extends AppCompatActivity {
         if(recordIndex == -1){
             Log.d("TRACE", recordIndex +"");
         }else{
+
+            getRecord(this, recordIndex);
+
             FragmentManager fm = getSupportFragmentManager();
             Fragment fragment = fm.findFragmentById(R.id.detailActivity);
 
             if(fragment == null){
-                fragment = new DetailFragment(new WeatherRecord("Location 1", 10.f, 20.0f));
+                fragment = new DetailFragment(record);
                 fm.beginTransaction()
                         .add(R.id.detailActivity, fragment)
                         .commit();
             }
-
 
         }
 
@@ -46,6 +51,16 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = new Intent(packageContext, DetailActivity.class);
         intent.putExtra("record", recordIndex);
         return intent;
+    }
+
+    private void getRecord(Context context, int id){
+
+        new Thread(() -> {
+            record = RecordDatabase.getInstance(context)
+                    .weatherRecordDao()
+                    .getRecord(id);
+        }).start();
+
     }
 
 }
