@@ -1,37 +1,33 @@
 package supsi.mobile.weather.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import supsi.mobile.weather.R;
 import supsi.mobile.weather.activities.DetailActivity;
-import supsi.mobile.weather.activities.MainActivity;
 import supsi.mobile.weather.model.WeatherRecord;
-import supsi.mobile.weather.persistence.RecordDatabase;
 
 public class WeatherRecordListFragment extends Fragment {
 
-    private List<WeatherRecord> entries = new ArrayList<>();
+    private List<WeatherRecord> records;
     private Context mainActivity;
 
-    public WeatherRecordListFragment(List<WeatherRecord> entries, Context activity) {
-        this.entries = entries;
+    public WeatherRecordListFragment(List<WeatherRecord> records, Context activity) {
+        this.records = records;
         this.mainActivity = activity;
     }
 
@@ -39,11 +35,6 @@ public class WeatherRecordListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     */
-    // TODO: Rename and change types and number of parameters
     public static WeatherRecordListFragment newInstance() {
         WeatherRecordListFragment fragment = new WeatherRecordListFragment();
         Bundle args = new Bundle();
@@ -64,7 +55,7 @@ public class WeatherRecordListFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.weather_record_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        WeatherRecordAdapter adapter = new WeatherRecordAdapter(entries, mainActivity);
+        WeatherRecordAdapter adapter = new WeatherRecordAdapter(records, mainActivity);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -73,6 +64,7 @@ public class WeatherRecordListFragment extends Fragment {
     static class WeatherRecordHolder extends RecyclerView.ViewHolder {
 
         private final TextView title;
+        private final TextView temperature;
         private WeatherRecord record;
         private Context mainActivity;
 
@@ -87,12 +79,14 @@ public class WeatherRecordListFragment extends Fragment {
                 }
             });
             title = itemView.findViewById(R.id.weather_record_list_item);
-
+            temperature = itemView.findViewById(R.id.weather_record_list_item_temperature);
 
         }
 
         public void bind(WeatherRecord entry, Context mainActivity) {
+            Log.d("TRACE", entry.getId() +"");
             this.title.setText(entry.getName());
+            temperature.setText(entry.getCurrentTemp() + " °C");
             this.record = entry;
             this.mainActivity = mainActivity;
         }
@@ -101,11 +95,11 @@ public class WeatherRecordListFragment extends Fragment {
 
     class WeatherRecordAdapter extends RecyclerView.Adapter<WeatherRecordHolder> {
 
-        private final List<WeatherRecord> entries;
         private final Context mainActivity;
+        private final List<WeatherRecord> records;
 
-        public WeatherRecordAdapter(List<WeatherRecord> entries, Context mainActivity) {
-            this.entries = entries;
+        public WeatherRecordAdapter(List<WeatherRecord> records, Context mainActivity) {
+            this.records = records;
             this.mainActivity = mainActivity;
         }
 
@@ -118,24 +112,13 @@ public class WeatherRecordListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull WeatherRecordHolder holder, int position) {
-            holder.bind(entries.get(position), mainActivity);
+            holder.bind(records.get(position), mainActivity);
         }
 
         @Override
         public int getItemCount() {
-            return entries.size();
+            return records.size();
         }
-    }
-
-    public void refreshUI(Context context) {
-
-        entries.clear();
-        entries.addAll(RecordDatabase
-                .getInstance(context)
-                .weatherRecordDao()
-                .getWeatherRecords()
-        );
-
     }
 
 }

@@ -6,20 +6,17 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import supsi.mobile.weather.R;
 import supsi.mobile.weather.fragments.WeatherRecordListFragment;
 import supsi.mobile.weather.model.WeatherRecord;
 import supsi.mobile.weather.persistence.RecordDatabase;
+import supsi.mobile.weather.persistence.WeatherRecordService;
 
-//TODO complete layout for detail fragment
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<WeatherRecord> entries = new ArrayList<>();
     private WeatherRecordListFragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +28,19 @@ public class MainActivity extends AppCompatActivity {
 
         //*********************//
 
+        WeatherRecordService.deleteRecords(this);
+
+        WeatherRecordService.getRecords(this);
+
+        //fillInitialState(this);
+
         FragmentManager fm = getSupportFragmentManager();
         fragment = (WeatherRecordListFragment)fm.findFragmentById(R.id.list_fragment_container);
 
         if (fragment == null) {
-            fragment = new WeatherRecordListFragment(entries, MainActivity.this);
+            fragment = new WeatherRecordListFragment(WeatherRecordService.getRecords(this), MainActivity.this);
 
-            dummyRecords(this);
+            fillInitialState(this);
 
             fm.beginTransaction()
                     .add(R.id.list_fragment_container, fragment)
@@ -46,38 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void dummyRecords(Context context){
+    private void fillInitialState(Context context){
 
-        new Thread(() -> {
-
-            RecordDatabase.getInstance(context)
-                    .weatherRecordDao()
-                    .deleteAll();
-
-            RecordDatabase.getInstance(context)
-                    .weatherRecordDao()
-                    .insertRecord(new WeatherRecord("1", 10.f, 20.f, 10.f));
-
-            RecordDatabase.getInstance(context)
-                    .weatherRecordDao()
-                    .insertRecord(new WeatherRecord("2", 10.f, 16.f, 10.f));
-
-            RecordDatabase.getInstance(context)
-                    .weatherRecordDao()
-                    .insertRecord(new WeatherRecord("3", 10.f, 18.f, 10.f));
-
-            RecordDatabase.getInstance(context)
-                    .weatherRecordDao()
-                    .insertRecord(new WeatherRecord("4", 10.f, 19.f, 10.f));
-
-
-            entries = RecordDatabase.getInstance(context)
-                    .weatherRecordDao()
-                    .getWeatherRecords();
-
-            fragment.refreshUI(context);
-
-        }).start();
+        WeatherRecordService.addRecord(this, new WeatherRecord(0,"1", 10.f, 20.f, 10.f));
+        WeatherRecordService.addRecord(this, new WeatherRecord(1,"2", 11.f, 20.f, 10.f));
+        WeatherRecordService.addRecord(this, new WeatherRecord(2,"3", 12.f, 20.f, 10.f));
+        WeatherRecordService.addRecord(this, new WeatherRecord(3,"4", 13.f, 20.f, 10.f));
 
     }
 

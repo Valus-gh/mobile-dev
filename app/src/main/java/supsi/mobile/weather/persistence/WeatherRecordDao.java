@@ -3,6 +3,7 @@ package supsi.mobile.weather.persistence;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -25,8 +26,8 @@ public interface WeatherRecordDao {
     @Query("DELETE FROM records")
     void deleteAll();
 
-    @Insert
-    void insertRecord(WeatherRecord record);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insertRecord(WeatherRecord record);
 
     @Delete
     void deleteRecord(WeatherRecord record);

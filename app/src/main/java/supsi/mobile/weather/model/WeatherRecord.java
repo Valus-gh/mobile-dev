@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "records")
 public class WeatherRecord {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    private long id;
 
     @ColumnInfo(name = "name")
     private final String name;
@@ -23,7 +23,7 @@ public class WeatherRecord {
     @ColumnInfo(name = "min_temp")
     private float minRecordedTemp;
 
-    public WeatherRecord(int id, String name, float currentTemp, float maxRecordedTemp, float minRecordedTemp) {
+    public WeatherRecord(long id, String name, float currentTemp, float maxRecordedTemp, float minRecordedTemp) {
         this.id = id;
         this.name = name;
         this.currentTemp = currentTemp;
@@ -72,11 +72,11 @@ public class WeatherRecord {
         this.currentTemp = currentTemp;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }

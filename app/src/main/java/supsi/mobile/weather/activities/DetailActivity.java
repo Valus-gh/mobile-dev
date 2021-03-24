@@ -7,12 +7,11 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import supsi.mobile.weather.fragments.DetailFragment;
 import supsi.mobile.weather.R;
 import supsi.mobile.weather.model.WeatherRecord;
-import supsi.mobile.weather.persistence.RecordDatabase;
+import supsi.mobile.weather.persistence.WeatherRecordService;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -23,44 +22,26 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        int recordIndex = getIntent().getIntExtra("record", -1);
+        long recordIndex = getIntent().getLongExtra("record", -1);
 
-        Log.d("TRACE", recordIndex +"");
+        WeatherRecord record = WeatherRecordService.getRecord(recordIndex);
 
-        if(recordIndex == -1){
-            Log.d("TRACE", recordIndex +"");
-        }else{
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.detailActivity);
 
-            getRecord(this, recordIndex);
-
-            FragmentManager fm = getSupportFragmentManager();
-            Fragment fragment = fm.findFragmentById(R.id.detailActivity);
-
-            if(fragment == null){
-                fragment = new DetailFragment(record);
-                fm.beginTransaction()
-                        .add(R.id.detailActivity, fragment)
-                        .commit();
-            }
-
+        if(fragment == null){
+            fragment = new DetailFragment(record);
+            fm.beginTransaction()
+                    .add(R.id.detailActivity, fragment)
+                    .commit();
         }
 
     }
 
-    public static Intent newIntent(Context packageContext, int recordIndex){
+    public static Intent newIntent(Context packageContext, long recordIndex){
         Intent intent = new Intent(packageContext, DetailActivity.class);
         intent.putExtra("record", recordIndex);
         return intent;
-    }
-
-    private void getRecord(Context context, int id){
-
-        new Thread(() -> {
-            record = RecordDatabase.getInstance(context)
-                    .weatherRecordDao()
-                    .getRecord(id);
-        }).start();
-
     }
 
 }
