@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.aksingh.owmjapis.api.APIException;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -33,15 +35,21 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(reqCode, resultCode, data);
 
         if (reqCode == requestCode) {
+//            Log.d("TRACE", "req code " + reqCode);
             if (resultCode == RESULT_OK) {
+//                Log.d("TRACE", "res code " + resultCode);
                 String city = data.getStringExtra("result");
+                Log.d("TRACE", "result " + city);
+
                 try {
                     WeatherRecord record = WeatherRecordManager.getInstance().getWeatherRecordByCityName(city);
                     WeatherRecordService.addRecord(this, record);
-                } catch (IOException | JSONException e) {
+                } catch (APIException e) {
                     e.printStackTrace();
                     Log.d("TRACE", "error eededede");
                 }
+
+                //Log.d("TRACE", "result " + data.getIntExtra("result", 0));
 
             }
         }
@@ -55,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
 
         fab.setOnClickListener((view) -> {
-            Intent intent = InputActivity.newIntent(this);
+            Intent intent = InputActivity.newIntent(getApplicationContext());
             startActivityForResult(intent, requestCode);
         });
 

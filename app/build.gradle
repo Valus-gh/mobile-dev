@@ -50,10 +50,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'io.nlopez.smartlocation:library:3.3.3'
     implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation group: 'net.aksingh', name: 'owm-japis', version: '2.5.3.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     annotationProcessor 'androidx.room:room-compiler:2.2.5'
-    compileOnly 'com.google.android.wearable:wearable:2.6.0'
 
-
-    implementation group: 'net.aksingh', name: 'owm-japis', version: '2.5.3.0'
 }

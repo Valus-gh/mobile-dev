@@ -26,7 +26,7 @@ public class InputActivity extends AppCompatActivity {
         submit.setOnClickListener((view) -> {
             if(editText.getText().length() != 0) {
                 Intent intent = new Intent();
-                intent.putExtra("result", editText.getText());
+                intent.putExtra("result", editText.getText().toString());
                 setResult(RESULT_OK, intent);
                 finish();
             }

@@ -1,7 +1,8 @@
 package supsi.mobile.weather;
 
-import net.aksingh.owmjapis.CurrentWeather;
-import net.aksingh.owmjapis.OpenWeatherMap;
+import net.aksingh.owmjapis.api.APIException;
+import net.aksingh.owmjapis.core.OWM;
+import net.aksingh.owmjapis.model.CurrentWeather;
 
 import org.json.JSONException;
 import java.io.IOException;
@@ -10,12 +11,12 @@ import supsi.mobile.weather.model.WeatherRecord;
 
 public class WeatherRecordManager {
 
-    private final OpenWeatherMap owm;
+    private final OWM owm;
     private static WeatherRecordManager instance;
 
     public WeatherRecordManager() {
-        owm = new OpenWeatherMap("2ce39100e5b965b227777e0715587cff");
-        owm.setUnits(OpenWeatherMap.Units.METRIC);
+        owm = new OWM("2ce39100e5b965b227777e0715587cff");
+        owm.setUnit(OWM.Unit.METRIC);
     }
 
     public static WeatherRecordManager getInstance() {
@@ -26,17 +27,17 @@ public class WeatherRecordManager {
 
     }
 
-    public WeatherRecord getWeatherRecordByCityName(String cityName) throws IOException, JSONException {
+    public WeatherRecord getWeatherRecordByCityName(String cityName) throws APIException {
         CurrentWeather currentWeather = owm.currentWeatherByCityName(cityName);
 
-        if (currentWeather.hasResponseCode()
-                && currentWeather.getResponseCode() == 200
+        if (currentWeather.hasRespCode()
+                && currentWeather.getRespCode() == 200
                 && currentWeather.hasCityName())
             return new WeatherRecord(
                     currentWeather.getCityName(),
-                    currentWeather.getMainInstance().getTemperature(),
-                    currentWeather.getMainInstance().getMaxTemperature(),
-                    currentWeather.getMainInstance().getMinTemperature());
+                    currentWeather.getMainData().getTemp().floatValue(),
+                    currentWeather.getMainData().getTempMax().floatValue(),
+                    currentWeather.getMainData().getTempMin().floatValue());
 
         return null;
     }
