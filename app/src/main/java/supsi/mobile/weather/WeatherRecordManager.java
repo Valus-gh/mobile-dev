@@ -18,7 +18,7 @@ public class WeatherRecordManager {
         owm.setUnits(OpenWeatherMap.Units.METRIC);
     }
 
-    WeatherRecordManager getInstance() {
+    public static WeatherRecordManager getInstance() {
         if (instance == null)
             instance = new WeatherRecordManager();
 
