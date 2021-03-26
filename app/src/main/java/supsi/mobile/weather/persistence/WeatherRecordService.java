@@ -1,6 +1,8 @@
 package supsi.mobile.weather.persistence;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -20,6 +22,22 @@ public class WeatherRecordService {
             localRecords = RecordDatabase.getInstance(context)
                     .weatherRecordDao()
                     .getWeatherRecords();
+
+        }).start();
+
+        return localRecords;
+
+    }
+
+    public static List<WeatherRecord> getRecords(Context context, Runnable runnable) {
+
+        new Thread(() -> {
+
+            localRecords = RecordDatabase.getInstance(context)
+                    .weatherRecordDao()
+                    .getWeatherRecords();
+
+            new Handler(Looper.getMainLooper()).post(runnable);
 
         }).start();
 
@@ -49,9 +67,9 @@ public class WeatherRecordService {
 
         new Thread(() -> {
 
-            record.setId(RecordDatabase.getInstance(context)
+            RecordDatabase.getInstance(context)
                     .weatherRecordDao()
-                    .insertRecord(record));
+                    .insertRecord(record);
 
         }).start();
 

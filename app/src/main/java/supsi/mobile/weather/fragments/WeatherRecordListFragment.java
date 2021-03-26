@@ -16,15 +16,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import supsi.mobile.weather.R;
 import supsi.mobile.weather.activities.DetailActivity;
 import supsi.mobile.weather.model.WeatherRecord;
+import supsi.mobile.weather.persistence.WeatherRecordService;
 
 public class WeatherRecordListFragment extends Fragment {
 
     private List<WeatherRecord> records;
     private Context mainActivity;
+    private RecyclerView recyclerView;
 
     public WeatherRecordListFragment(List<WeatherRecord> records, Context activity) {
         this.records = records;
@@ -52,13 +55,20 @@ public class WeatherRecordListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.weather_record_list, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.weather_record_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        this.recyclerView = view.findViewById(R.id.weather_record_list);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         WeatherRecordAdapter adapter = new WeatherRecordAdapter(records, mainActivity);
-        recyclerView.setAdapter(adapter);
+        this.recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    public void reloadPlaces(){
+
+        ((WeatherRecordAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setRecords(WeatherRecordService.getRecords(mainActivity));
+        Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
+
     }
 
     static class WeatherRecordHolder extends RecyclerView.ViewHolder {
@@ -96,7 +106,7 @@ public class WeatherRecordListFragment extends Fragment {
     class WeatherRecordAdapter extends RecyclerView.Adapter<WeatherRecordHolder> {
 
         private final Context mainActivity;
-        private final List<WeatherRecord> records;
+        private List<WeatherRecord> records;
 
         public WeatherRecordAdapter(List<WeatherRecord> records, Context mainActivity) {
             this.records = records;
@@ -119,6 +129,11 @@ public class WeatherRecordListFragment extends Fragment {
         public int getItemCount() {
             return records.size();
         }
+
+        public void setRecords(List<WeatherRecord> records){
+            this.records = records;
+        }
+
     }
 
 }

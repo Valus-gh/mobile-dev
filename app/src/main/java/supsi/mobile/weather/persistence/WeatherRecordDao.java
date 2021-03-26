@@ -27,7 +27,7 @@ public interface WeatherRecordDao {
     void deleteAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertRecord(WeatherRecord record);
+    void insertRecord(WeatherRecord record);
 
     @Delete
     void deleteRecord(WeatherRecord record);

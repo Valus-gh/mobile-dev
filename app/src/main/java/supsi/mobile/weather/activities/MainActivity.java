@@ -5,26 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import net.aksingh.owmjapis.api.APIException;
-
-import org.json.JSONException;
-
-import java.io.IOException;
+import org.openweathermap.api.model.currentweather.CurrentWeather;
 
 import supsi.mobile.weather.R;
-import supsi.mobile.weather.WeatherRecordManager;
 import supsi.mobile.weather.fragments.WeatherRecordListFragment;
 import supsi.mobile.weather.model.WeatherRecord;
 import supsi.mobile.weather.persistence.WeatherRecordService;
+import supsi.mobile.weather.request.ResultProcessor;
+import supsi.mobile.weather.request.WeatherRecordFetcher;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ResultProcessor<CurrentWeather> {
 
     private WeatherRecordListFragment fragment;
     private FloatingActionButton fab;
@@ -34,24 +30,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int reqCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
 
-        if (reqCode == requestCode) {
-//            Log.d("TRACE", "req code " + reqCode);
-            if (resultCode == RESULT_OK) {
-//                Log.d("TRACE", "res code " + resultCode);
-                String city = data.getStringExtra("result");
-                Log.d("TRACE", "result " + city);
+        if (reqCode == requestCode && resultCode == RESULT_OK) {
 
-                try {
-                    WeatherRecord record = WeatherRecordManager.getInstance().getWeatherRecordByCityName(city);
-                    WeatherRecordService.addRecord(this, record);
-                } catch (APIException e) {
-                    e.printStackTrace();
-                    Log.d("TRACE", "error eededede");
-                }
+            String city = data.getStringExtra("result");
+            Log.d("TRACE", "result " + city);
 
-                //Log.d("TRACE", "result " + data.getIntExtra("result", 0));
+            WeatherRecordFetcher fetcher = new WeatherRecordFetcher(MainActivity.this);
+            fetcher.execute(city);
 
-            }
         }
     }
 
@@ -73,19 +59,15 @@ public class MainActivity extends AppCompatActivity {
 
         //*********************//
 
-        WeatherRecordService.deleteRecords(this);
+        //WeatherRecordService.deleteRecords(this);
 
-        WeatherRecordService.getRecords(this);
-
-        //fillInitialState(this);
+       // fillInitialState();
 
         FragmentManager fm = getSupportFragmentManager();
         fragment = (WeatherRecordListFragment) fm.findFragmentById(R.id.list_fragment_container);
 
         if (fragment == null) {
-            fragment = new WeatherRecordListFragment(WeatherRecordService.getRecords(this), MainActivity.this);
-
-            fillInitialState();
+            fragment = new WeatherRecordListFragment(WeatherRecordService.getRecords(this, () -> fragment.reloadPlaces()), MainActivity.this);
 
             fm.beginTransaction()
                     .add(R.id.list_fragment_container, fragment)
@@ -101,4 +83,22 @@ public class MainActivity extends AppCompatActivity {
         WeatherRecordService.addRecord(this, new WeatherRecord(3, "4", 13.f, 20.f, 10.f));
     }
 
+    @Override
+    public void processResult(CurrentWeather currentWeather) {
+
+        WeatherRecordService.addRecord(this,
+                new WeatherRecord(
+                        currentWeather.getCityName(),
+                        (float) currentWeather.getMainParameters().getTemperature(),
+                        (float) currentWeather.getMainParameters().getMaximumTemperature(),
+                        (float) currentWeather.getMainParameters().getMinimumTemperature()
+                ));
+
+
+        fragment.reloadPlaces();
+
+//        finish();
+//        startActivity(getIntent());
+
+    }
 }
