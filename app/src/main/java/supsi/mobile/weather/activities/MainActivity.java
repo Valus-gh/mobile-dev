@@ -26,7 +26,6 @@ import org.openweathermap.api.model.currentweather.CurrentWeather;
 import java.util.concurrent.TimeUnit;
 
 import supsi.mobile.weather.LocationManager;
-import supsi.mobile.weather.MyNotificationManager;
 import supsi.mobile.weather.NotifyTemperatureWorker;
 import supsi.mobile.weather.R;
 import supsi.mobile.weather.fragments.WeatherRecordListFragment;
