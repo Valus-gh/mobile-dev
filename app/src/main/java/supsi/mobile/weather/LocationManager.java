@@ -4,7 +4,12 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.nlopez.smartlocation.OnGeocodingListener;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
@@ -17,6 +22,7 @@ public class LocationManager {
 
     private static LocationManager instance;
     private Context context;
+    private Location currentLocation;
 
     public static LocationManager getInstance() {
 
@@ -27,6 +33,7 @@ public class LocationManager {
 
     }
 
+
     public void startListening(Context context) {
 
         this.context = context;
@@ -36,17 +43,25 @@ public class LocationManager {
                 .setDistance(0)
                 .setInterval(5000);
 
-        SmartLocation.with(context).location().continuous().config(builder.build())
+        SmartLocation.with(context)
+                .location()
+                .continuous()
+                .config(builder.build())
                 .start(new OnLocationUpdatedListener() {
                     @Override
                     public void onLocationUpdated(Location location) {
                         Log.i("GPS", "Location" + location);
+                        currentLocation = location;
                     }
                 });
 
     }
 
-//    public Location getGeocodedLocation(String location){
+    public Location getLocation() {
+        return currentLocation;
+    }
+
+    //    public Location getGeocodedLocation(String location){
 //
 //        final Location[] toReturn = new Location[1];
 //

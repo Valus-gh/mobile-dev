@@ -15,22 +15,24 @@ import org.openweathermap.api.query.Type;
 import org.openweathermap.api.query.UnitFormat;
 import org.openweathermap.api.query.currentweather.CurrentWeatherOneLocationQuery;
 
-public class WeatherRecordFetcher extends AsyncTask<String, Void, CurrentWeather> {
+public class CoordsWeatherRecordFetcher extends AsyncTask<String, Void, CurrentWeather> {
 
     private static final String KEY = "2ce39100e5b965b227777e0715587cff";
     private final ResultProcessor<CurrentWeather> processor;
 
-    public WeatherRecordFetcher(ResultProcessor<CurrentWeather> processor) {
+    public CoordsWeatherRecordFetcher(ResultProcessor<CurrentWeather> processor) {
         this.processor = processor;
     }
 
-    private CurrentWeather getWeatherFromCity(String name) {
+
+    private CurrentWeather getWeatherFromCoords(String latitude, String longitude) {
+        Coordinate currentCoords = new Coordinate();
+        currentCoords.setLatitude(latitude);
+        currentCoords.setLongitude(longitude);
         DataWeatherClient data = new UrlConnectionDataWeatherClient(KEY);
         CurrentWeatherOneLocationQuery query = QueryBuilderPicker.pick()
                 .currentWeather()
-                .oneLocation()
-                .byCityName(name)
-                .type(Type.ACCURATE)
+                .oneLocation().byGeographicCoordinates(currentCoords)
                 .language(Language.ITALIAN)
                 .responseFormat(ResponseFormat.JSON)
                 .unitFormat(UnitFormat.METRIC)
@@ -43,10 +45,9 @@ public class WeatherRecordFetcher extends AsyncTask<String, Void, CurrentWeather
         return currentWeather;
     }
 
-
     @Override
     protected CurrentWeather doInBackground(String... strings) {
-        return getWeatherFromCity(strings[0]);
+            return getWeatherFromCoords(strings[0], strings[1]);
     }
 
     @Override
