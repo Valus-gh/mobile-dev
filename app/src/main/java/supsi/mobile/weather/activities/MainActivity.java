@@ -25,6 +25,7 @@ import org.openweathermap.api.model.currentweather.CurrentWeather;
 
 import java.util.concurrent.TimeUnit;
 
+import supsi.mobile.weather.CoordsWeatherRecordFetcher;
 import supsi.mobile.weather.LocationManager;
 import supsi.mobile.weather.NotifyTemperatureWorker;
 import supsi.mobile.weather.R;
@@ -46,11 +47,23 @@ public class MainActivity extends AppCompatActivity implements ResultProcessor<C
 
         if (reqCode == requestCode && resultCode == RESULT_OK) {
 
-            String city = data.getStringExtra("result");
-            Log.d("TRACE", "result " + city);
 
-            WeatherRecordFetcher fetcher = new WeatherRecordFetcher(MainActivity.this);
-            fetcher.execute(city);
+            if(data.getIntExtra("type", -1) == 0){
+
+                String city = data.getStringExtra("result");
+                Log.d("TRACE", "result " + city);
+                WeatherRecordFetcher fetcher = new WeatherRecordFetcher(MainActivity.this);
+                fetcher.execute(city);
+
+            }else if(data.getIntExtra("type", -1) == 1){
+
+                String[] lonlat = data.getStringArrayExtra("result");
+                CoordsWeatherRecordFetcher fetcher = new CoordsWeatherRecordFetcher(MainActivity.this);
+                fetcher.execute(lonlat[0], lonlat[1]);
+
+            }
+
+
         }
     }
 
