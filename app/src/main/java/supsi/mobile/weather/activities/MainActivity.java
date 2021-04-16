@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements ResultProcessor<C
         fragment = (WeatherRecordListFragment) fm.findFragmentById(R.id.list_fragment_container);
 
         if (fragment == null) {
-            fragment = new WeatherRecordListFragment(WeatherRecordService.getRecords(this, () -> fragment.reloadPlaces()), MainActivity.this);
+            fragment = new WeatherRecordListFragment(WeatherRecordService.updateRecords(this, () -> fragment.reloadPlaces()), MainActivity.this);
 
             fm.beginTransaction()
                     .add(R.id.list_fragment_container, fragment)

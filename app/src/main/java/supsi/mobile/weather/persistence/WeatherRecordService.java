@@ -8,14 +8,15 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import supsi.mobile.weather.model.WeatherRecord;
 
 public class WeatherRecordService {
 
-    private static List<WeatherRecord> localRecords = new ArrayList<>();
+    private static List<WeatherRecord> localRecords = new CopyOnWriteArrayList<>();
 
-    public static List<WeatherRecord> getRecords(Context context) {
+    public static List<WeatherRecord> updateRecords(Context context) {
 
         new Thread(() -> {
 
@@ -29,13 +30,31 @@ public class WeatherRecordService {
 
     }
 
-    public static List<WeatherRecord> getRecords(Context context, Runnable runnable) {
+    public static List<WeatherRecord> updateRecords(Context context, Runnable runnable) {
 
         new Thread(() -> {
 
             localRecords = RecordDatabase.getInstance(context)
                     .weatherRecordDao()
                     .getWeatherRecords();
+
+            new Handler(Looper.getMainLooper()).post(runnable);
+
+        }).start();
+
+        return localRecords;
+
+    }
+
+    public static List<WeatherRecord> getRecords() {
+
+        return localRecords;
+
+    }
+
+    public static List<WeatherRecord> getRecords(Context context, Runnable runnable) {
+
+        new Thread(() -> {
 
             new Handler(Looper.getMainLooper()).post(runnable);
 
@@ -63,16 +82,19 @@ public class WeatherRecordService {
 
     public static void addRecord(Context context, WeatherRecord record) {
 
-        localRecords.add(record);
+        if (localRecords.stream().noneMatch((r -> record.getName().equals(r.getName())))) {
 
-        new Thread(() -> {
+            localRecords.add(record);
 
-            RecordDatabase.getInstance(context)
-                    .weatherRecordDao()
-                    .insertRecord(record);
+            new Thread(() -> {
 
-        }).start();
+                RecordDatabase.getInstance(context)
+                        .weatherRecordDao()
+                        .insertRecord(record);
 
+            }).start();
+
+        }
     }
 
     public static void deleteRecords(Context context) {

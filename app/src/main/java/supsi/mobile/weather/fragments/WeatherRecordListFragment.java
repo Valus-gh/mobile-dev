@@ -66,7 +66,7 @@ public class WeatherRecordListFragment extends Fragment {
 
     public void reloadPlaces(){
 
-        ((WeatherRecordAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setRecords(WeatherRecordService.getRecords(mainActivity));
+        ((WeatherRecordAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setRecords(WeatherRecordService.getRecords());
         Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
 
     }

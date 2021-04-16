@@ -1,4 +1,4 @@
-package supsi.mobile.weather.request;
+package supsi.mobile.weather;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
@@ -14,6 +14,8 @@ import org.openweathermap.api.query.ResponseFormat;
 import org.openweathermap.api.query.Type;
 import org.openweathermap.api.query.UnitFormat;
 import org.openweathermap.api.query.currentweather.CurrentWeatherOneLocationQuery;
+
+import supsi.mobile.weather.request.ResultProcessor;
 
 public class CoordsWeatherRecordFetcher extends AsyncTask<String, Void, CurrentWeather> {
 

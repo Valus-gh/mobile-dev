@@ -13,7 +13,7 @@ import androidx.work.WorkerParameters;
 import org.openweathermap.api.model.currentweather.CurrentWeather;
 
 import supsi.mobile.weather.model.WeatherRecord;
-import supsi.mobile.weather.request.CoordsWeatherRecordFetcher;
+import supsi.mobile.weather.CoordsWeatherRecordFetcher;
 import supsi.mobile.weather.request.ResultProcessor;
 
 public class NotifyTemperatureWorker extends Worker implements ResultProcessor<CurrentWeather> {
@@ -31,7 +31,6 @@ public class NotifyTemperatureWorker extends Worker implements ResultProcessor<C
     }
 
     public void notifyCurrentLocationWeather() {
-        Log.d("TRACE", "cicciaaaaaaaa");
         CoordsWeatherRecordFetcher fetcher = new CoordsWeatherRecordFetcher(this);
         Location location = LocationManager.getInstance().getLocation();
         fetcher.execute(
