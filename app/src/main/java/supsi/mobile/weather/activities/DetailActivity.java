@@ -15,16 +15,14 @@ import supsi.mobile.weather.persistence.WeatherRecordService;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private WeatherRecord record;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        long recordIndex = getIntent().getLongExtra("record", -1);
+        int recordIndex = getIntent().getIntExtra("record", -1);
 
-        WeatherRecord record = WeatherRecordService.getRecord(recordIndex);
+        WeatherRecord record = WeatherRecordService.getLocalRecordByPosition(recordIndex);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.detailActivity);
@@ -38,7 +36,7 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    public static Intent newIntent(Context packageContext, long recordIndex){
+    public static Intent newIntent(Context packageContext, int recordIndex){
         Intent intent = new Intent(packageContext, DetailActivity.class);
         intent.putExtra("record", recordIndex);
         return intent;

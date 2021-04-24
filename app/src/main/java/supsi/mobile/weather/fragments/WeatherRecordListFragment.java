@@ -34,16 +34,7 @@ public class WeatherRecordListFragment extends Fragment {
         this.mainActivity = activity;
     }
 
-    public WeatherRecordListFragment() {
-        // Required empty public constructor
-    }
-
-    public static WeatherRecordListFragment newInstance() {
-        WeatherRecordListFragment fragment = new WeatherRecordListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public WeatherRecordListFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,30 +66,28 @@ public class WeatherRecordListFragment extends Fragment {
 
         private final TextView title;
         private final TextView temperature;
-        private WeatherRecord record;
         private Context mainActivity;
+        private int position;
 
         public WeatherRecordHolder(LayoutInflater layoutInflater, ViewGroup viewGroup) {
             super(layoutInflater.inflate(R.layout.weather_record_list_item, viewGroup, false));
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = DetailActivity.newIntent(mainActivity, record.getId());
-                    mainActivity.startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = DetailActivity.newIntent(mainActivity, position);
+                mainActivity.startActivity(intent);
             });
+
             title = itemView.findViewById(R.id.weather_record_list_item);
             temperature = itemView.findViewById(R.id.weather_record_list_item_temperature);
 
         }
 
-        public void bind(WeatherRecord entry, Context mainActivity) {
-            Log.d("TRACE", entry.getId() +"");
+        public void bind(WeatherRecord entry, int position, Context mainActivity) {
+            Log.d("TRACE", entry.getId() +" id for entry " + entry.getName() + ", position " + position);
             this.title.setText(entry.getName());
             temperature.setText(entry.getCurrentTemp() + " °C");
-            this.record = entry;
             this.mainActivity = mainActivity;
+            this.position = position;
         }
 
     }
@@ -122,7 +111,7 @@ public class WeatherRecordListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull WeatherRecordHolder holder, int position) {
-            holder.bind(records.get(position), mainActivity);
+            holder.bind(records.get(position), position, mainActivity);
         }
 
         @Override

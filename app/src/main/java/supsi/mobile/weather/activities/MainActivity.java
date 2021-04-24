@@ -1,5 +1,6 @@
 package supsi.mobile.weather.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -15,7 +16,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.openweathermap.api.model.currentweather.CurrentWeather;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import supsi.mobile.weather.CoordsWeatherRecordFetcher;
@@ -47,8 +48,7 @@ public class MainActivity extends AppCompatActivity implements ResultProcessor<C
 
         if (reqCode == requestCode && resultCode == RESULT_OK) {
 
-
-            if(data.getIntExtra("type", -1) == 0){
+            if(Objects.requireNonNull(data).getIntExtra("type", -1) == 0){
 
                 String city = data.getStringExtra("result");
                 Log.d("TRACE", "result " + city);
@@ -97,8 +97,6 @@ public class MainActivity extends AppCompatActivity implements ResultProcessor<C
             startActivityForResult(intent, requestCode);
         });
 
-        //*********************//
-
         //WeatherRecordService.deleteRecords(this);
 
         FragmentManager fm = getSupportFragmentManager();
@@ -122,13 +120,10 @@ public class MainActivity extends AppCompatActivity implements ResultProcessor<C
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 0: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    LocationManager.getInstance().startListening(this);
-                return;
-            }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 0) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                LocationManager.getInstance().startListening(this);
         }
     }
 
@@ -146,8 +141,6 @@ public class MainActivity extends AppCompatActivity implements ResultProcessor<C
 
         fragment.reloadPlaces();
 
-//        finish();
-//        startActivity(getIntent());
     }
 
 }

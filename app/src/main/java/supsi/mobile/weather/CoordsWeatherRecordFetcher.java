@@ -11,7 +11,6 @@ import org.openweathermap.api.model.currentweather.CurrentWeather;
 import org.openweathermap.api.query.Language;
 import org.openweathermap.api.query.QueryBuilderPicker;
 import org.openweathermap.api.query.ResponseFormat;
-import org.openweathermap.api.query.Type;
 import org.openweathermap.api.query.UnitFormat;
 import org.openweathermap.api.query.currentweather.CurrentWeatherOneLocationQuery;
 

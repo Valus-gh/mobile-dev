@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -77,6 +76,14 @@ public class WeatherRecordService {
             Log.d("TRACE", "record index not present on database");
 
         return null;
+
+    }
+
+    public static WeatherRecord getLocalRecordByPosition(int index) {
+
+        Log.d("TRACE", localRecords.toString());
+
+        return localRecords.get(index);
 
     }
 

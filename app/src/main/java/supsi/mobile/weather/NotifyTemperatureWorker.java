@@ -2,7 +2,6 @@ package supsi.mobile.weather;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -13,7 +12,6 @@ import androidx.work.WorkerParameters;
 import org.openweathermap.api.model.currentweather.CurrentWeather;
 
 import supsi.mobile.weather.model.WeatherRecord;
-import supsi.mobile.weather.CoordsWeatherRecordFetcher;
 import supsi.mobile.weather.request.ResultProcessor;
 
 public class NotifyTemperatureWorker extends Worker implements ResultProcessor<CurrentWeather> {
@@ -24,6 +22,7 @@ public class NotifyTemperatureWorker extends Worker implements ResultProcessor<C
         this.context = context;
     }
 
+    @NonNull
     @Override
     public Result doWork() {
         notifyCurrentLocationWeather();

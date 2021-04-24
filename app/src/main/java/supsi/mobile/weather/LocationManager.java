@@ -4,24 +4,14 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import io.nlopez.smartlocation.OnGeocodingListener;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
-import io.nlopez.smartlocation.geocoding.utils.LocationAddress;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
 import io.nlopez.smartlocation.location.config.LocationParams;
 
 public class LocationManager {
 
     private static LocationManager instance;
-    private Context context;
     private Location currentLocation;
 
     public static LocationManager getInstance() {
@@ -33,10 +23,7 @@ public class LocationManager {
 
     }
 
-
     public void startListening(Context context) {
-
-        this.context = context;
 
         LocationParams.Builder builder = new LocationParams.Builder()
                 .setAccuracy(LocationAccuracy.HIGH)
@@ -47,12 +34,9 @@ public class LocationManager {
                 .location()
                 .continuous()
                 .config(builder.build())
-                .start(new OnLocationUpdatedListener() {
-                    @Override
-                    public void onLocationUpdated(Location location) {
-                        Log.i("GPS", "Location" + location);
-                        currentLocation = location;
-                    }
+                .start(location -> {
+                    Log.i("GPS", "Location" + location);
+                    currentLocation = location;
                 });
 
     }
@@ -60,27 +44,5 @@ public class LocationManager {
     public Location getLocation() {
         return currentLocation;
     }
-
-    //    public Location getGeocodedLocation(String location){
-//
-//        final Location[] toReturn = new Location[1];
-//
-//        SmartLocation.with(context).geocoding()
-//                .direct(location, new OnGeocodingListener() {
-//                    @Override
-//                    public void onLocationResolved(String s, List<LocationAddress> list) {
-//                        if(list.size() > 0)
-//                             toReturn[0] = list.get(0).getLocation();
-//
-//                    }
-//                });
-//
-//        Log.i("GPS", toReturn[0].toString());
-//
-//        return toReturn[0];
-//
-//    }
-
-
 
 }

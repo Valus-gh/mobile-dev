@@ -51,8 +51,6 @@ public class InputActivity extends AppCompatActivity {
     }
 
     public static Intent newIntent(Context packageContext) {
-        Intent intent = new Intent(packageContext, InputActivity.class);
-
-        return intent;
+        return new Intent(packageContext, InputActivity.class);
     }
 }

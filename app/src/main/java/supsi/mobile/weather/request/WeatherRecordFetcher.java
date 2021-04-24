@@ -6,7 +6,6 @@ import android.util.Log;
 
 import org.openweathermap.api.DataWeatherClient;
 import org.openweathermap.api.UrlConnectionDataWeatherClient;
-import org.openweathermap.api.common.Coordinate;
 import org.openweathermap.api.model.currentweather.CurrentWeather;
 import org.openweathermap.api.query.Language;
 import org.openweathermap.api.query.QueryBuilderPicker;

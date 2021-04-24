@@ -20,9 +20,7 @@ public class DetailFragment extends Fragment {
         this.record = record;
     }
 
-    public DetailFragment() {
-        // Required empty public constructor
-    }
+    public DetailFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,6 @@ public class DetailFragment extends Fragment {
             minTemperature.setText(String.format("%s C", record.getMinRecordedTemp()));
 
         }
-
 
         return view;
     }
